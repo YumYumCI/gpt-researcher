@@ -12,8 +12,11 @@ markdown
 langchain
 langchain_community
 langchain-openai
+
 langchain_ollama
 duckduckgo-search
+markdown-to-json
+
 tiktoken
 gpt-researcher
 arxiv
