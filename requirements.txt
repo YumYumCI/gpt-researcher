@@ -13,6 +13,7 @@ langchain
 langchain_community
 langchain-openai
 langchain_ollama
+duckduckgo-search
 tiktoken
 gpt-researcher
 arxiv
