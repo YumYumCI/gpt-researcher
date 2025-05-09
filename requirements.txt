@@ -16,6 +16,7 @@ langchain-openai
 langchain_ollama
 duckduckgo-search
 markdown-to-json
+selenium
 
 tiktoken
 gpt-researcher
@@ -34,6 +35,7 @@ json_repair
 json5
 loguru
 langgraph
+langgraph-cli
 
 # uncomment for testing
 # pytest
