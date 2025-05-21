@@ -1,0 +1,6 @@
+langchain_ollama
+duckduckgo-search
+markdown-to-json
+selenium
+watchdog
+langgraph-cli

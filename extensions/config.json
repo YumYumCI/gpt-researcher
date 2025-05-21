@@ -1,0 +1,31 @@
+{
+  "defaults": {
+    "query": "Is AI in a hype cycle?",
+    "team": "blogger",
+    "max_sections": 4,
+    "publish_formats": {
+      "markdown": true,
+      "pdf": false,
+      "docx": false
+    },
+    "include_human_feedback": false,
+    "follow_guidelines": true,
+    "model": "gpt-4o",
+    "guidelines": [
+      "Use clear headings and subheadings",
+      "Keep paragraphs short (2 to 4 sentences max)",
+      "Use bullet points, numbered lists, and bolding for key takeaways",
+      "The report MUST be written in APA format",
+      "Maintain consistency in tone throughout"
+    ],
+    "verbose": true
+  },
+  "updates_queue": [
+    {
+      "query": "What is the latest news on the pope"
+    },
+    {
+      "query": "What is the latest news on the menendez brothers"
+    }
+  ]
+}
