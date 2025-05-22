@@ -1,5 +1,15 @@
-from typing import TypedDict, List, Annotated
+from typing import TypedDict, List, Annotated, Optional
 import operator
+
+class Subsection(TypedDict):
+    subheading: str
+    content: str
+
+
+class MainContentSection(TypedDict):
+    heading: str
+    content: str
+    subsections: List[Subsection]
 
 
 class ResearchState(TypedDict):
@@ -14,8 +24,7 @@ class ResearchState(TypedDict):
     date: str
     table_of_contents: str
     introduction: str
+    main_content: List[MainContentSection]
     conclusion: str
     sources: List[str]
     report: str
-
-

@@ -1,7 +1,6 @@
-
-
 def build_agents(task, websocket=None, stream_output=None, tone=None, headers=None):
     task_team = task.get("team", "default")
+    output_dir = task.get("output_dir", "./extensions/outputs")
 
     if task_team == "blogger":
         from agents.blogger import EditorAgent, WriterAgent, PublisherAgent
@@ -16,6 +15,6 @@ def build_agents(task, websocket=None, stream_output=None, tone=None, headers=No
         "writer": WriterAgent(websocket, stream_output, headers),
         "editor": EditorAgent(websocket, stream_output, tone, headers),
         "research": ResearchAgent(websocket, stream_output, tone, headers),
-        "publisher": PublisherAgent("./extensions/outputs", websocket, stream_output, headers),
+        "publisher": PublisherAgent(output_dir, websocket, stream_output, headers),
         "human": HumanAgent(websocket, stream_output, headers)
     }

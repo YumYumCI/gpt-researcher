@@ -31,6 +31,7 @@ class ChiefEditorAgent:
         self.tone = tone
         self.task_id = self._generate_task_id()
         self.output_dir = self._create_output_directory()
+        self.agents["publisher"].output_dir = self.output_dir
 
     def _generate_task_id(self) -> str:
         """Generate a unique task ID using UUID."""

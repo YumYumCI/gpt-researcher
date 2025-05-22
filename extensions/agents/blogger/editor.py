@@ -4,8 +4,8 @@ from typing import Dict, List, Optional
 
 from langgraph.graph import StateGraph, END
 
-from ..utils.views import print_agent_output
-from ..utils.llms import call_model
+from extensions.agents.utils.views import print_agent_output
+from extensions.agents.utils.llms import call_model
 from extensions.memory.draft import DraftState
 from extensions.agents import ResearchAgent, ReviewerAgent, ReviserAgent
 
@@ -60,7 +60,10 @@ class EditorAgent:
         workflow = self._create_workflow()
         chain = workflow.compile()
 
-        queries = research_state.get("sections")
+        queries = research_state.get("sections") or []
+        if not queries:
+            raise ValueError("No research sections found.")
+
         title = research_state.get("title")
 
         self._log_parallel_research(queries)
