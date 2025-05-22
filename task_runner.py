@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 import argparse
 import traceback
+import time
+import socket
 
 from colorama import Fore, Style, init
 init(autoreset=True)
@@ -22,7 +24,6 @@ def validate_task(task, required_keys):
 def run_task(config, defaults, task_updates, task_file, task_index, total_tasks):
     print(f"\n--- Processing task {task_index}/{total_tasks} ---")
 
-    # Merge defaults with task updates (ignoring None values)
     merged_config = {
         **defaults,
         **{k: v for k, v in task_updates.items() if v is not None}
@@ -38,7 +39,7 @@ def run_task(config, defaults, task_updates, task_file, task_index, total_tasks)
     # if missing_keys:
     #     print(Fore.YELLOW + f"✗ Skipping task {task_index}: Missing keys: {missing_keys}")
     #     return
-
+    
     # Write the task config
     with open(task_file, 'w') as f:
         json.dump(merged_config, f, indent=2)
@@ -52,6 +53,18 @@ def run_task(config, defaults, task_updates, task_file, task_index, total_tasks)
         print(Fore.RED + f"✗ Task {task_index} failed with return code {e.returncode}")
         print(f"Command: {e.cmd}")
         traceback.print_exc()
+
+
+def wait_for_port(host: str, port: int, timeout: float = 10.0):
+    """Wait until a port is open and accepting connections."""
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            with socket.create_connection((host, port), timeout=1):
+                return True
+        except (ConnectionRefusedError, OSError):
+            time.sleep(0.5)
+    raise TimeoutError(f"Timed out waiting for {host}:{port} to become available.")
 
 
 def process_tasks(config_path, task_path):
@@ -79,7 +92,31 @@ if __name__ == "__main__":
 
     if not config_path.exists():
         raise FileNotFoundError(f"Config file not found at {config_path}")
-
     task_path.parent.mkdir(parents=True, exist_ok=True)
 
-    process_tasks(config_path, task_path)
+    # === Start background services ===
+    slugifier_process = subprocess.Popen([sys.executable, str(base_dir / "custom_agents" / "markdown_slugifier.py")])
+    print("✓ Markdown slugifier started")
+
+    uvicorn_process = subprocess.Popen([
+        sys.executable, "-m", "uvicorn", "main:app", "--reload"
+    ], cwd=base_dir)
+    print("✓ Starting FastAPI server...")
+
+    try:
+        wait_for_port("127.0.0.1", 8000, timeout=15)
+        print("✓ FastAPI server is live at http://127.0.0.1:8000")
+
+        # === Run tasks ===
+        process_tasks(config_path, task_path)
+
+    finally:
+        print(Fore.CYAN + "\n✓ Shutting down services...")
+        uvicorn_process.terminate()
+        uvicorn_process.wait()
+        print(Fore.CYAN + "✓ FastAPI server terminated.")
+        time.sleep(60)
+        slugifier_process.terminate()
+        slugifier_process.wait()
+        print(Fore.CYAN + "✓ Markdown slugifier terminated.")
+        print("✓ All services stopped.")
