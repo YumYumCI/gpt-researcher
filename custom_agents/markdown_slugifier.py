@@ -3,6 +3,7 @@ import time
 import shutil
 import logging
 from pathlib import Path
+from markdown import markdown
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -10,6 +11,7 @@ from watchdog.events import FileSystemEventHandler
 BASE_DIR = Path(__file__).resolve().parent
 WATCH_FOLDER = BASE_DIR / "reports"
 DEST_FOLDER = BASE_DIR / "reports_md"
+HTML_FOLDER = BASE_DIR / "reports_html"
 FILE_EXTENSION = ".md"
 LOG_FILE = BASE_DIR / "slugifier.log"
 # ==============
@@ -34,7 +36,7 @@ def slugify(text):
 
 
 def get_heading(file_path: Path) -> str | None:
-    """Extracts the first level-1 Markdown heading from the file."""
+    """Extract the first level-1 Markdown heading."""
     try:
         with file_path.open("r", encoding="utf-8") as f:
             for line in f:
@@ -57,8 +59,20 @@ def wait_until_ready(file_path: Path, timeout=10) -> bool:
             last_size = current_size
             time.sleep(0.5)
         except FileNotFoundError:
-            pass  # Still being created
+            pass
     return False
+
+
+def convert_markdown_to_html(md_path: Path, html_path: Path):
+    """Converts Markdown content to HTML and saves it."""
+    try:
+        with md_path.open("r", encoding="utf-8") as f:
+            md_content = f.read()
+        html_content = markdown(md_content)
+        html_path.write_text(html_content, encoding="utf-8")
+        logging.info(f"✓ Converted to HTML → {html_path.name}")
+    except Exception as e:
+        logging.error(f"Error converting {md_path.name} to HTML: {e}")
 
 
 class MarkdownHandler(FileSystemEventHandler):
@@ -67,21 +81,21 @@ class MarkdownHandler(FileSystemEventHandler):
         if path.is_dir() or path.suffix != FILE_EXTENSION:
             return
 
-        logging.info(f"Detected new file: {path.name}")
+        logging.info(f"📄 Detected new file: {path.name}")
 
         if not wait_until_ready(path):
-            logging.warning(f"File never stabilized: {path.name}")
+            logging.warning(f"⚠️ File never stabilized: {path.name}")
             return
 
         heading_slug = get_heading(path)
         if not heading_slug:
-            logging.warning(f"No heading found in {path.name}, skipping")
+            logging.warning(f"⚠️ No heading found in {path.name}, skipping")
             return
 
         new_filename = f"{heading_slug}{FILE_EXTENSION}"
         dest_path = DEST_FOLDER / new_filename
 
-        # Handle duplicate filenames
+        # Handle duplicates
         counter = 1
         while dest_path.exists():
             dest_path = DEST_FOLDER / f"{heading_slug}-{counter}{FILE_EXTENSION}"
@@ -89,16 +103,21 @@ class MarkdownHandler(FileSystemEventHandler):
 
         try:
             shutil.move(str(path), str(dest_path))
-            logging.info(f"Moved '{path.name}' → '{dest_path.name}'")
+            logging.info(f"📦 Moved '{path.name}' → '{dest_path.name}'")
+
+            html_filename = dest_path.with_suffix(".html").name
+            html_path = HTML_FOLDER / html_filename
+            convert_markdown_to_html(dest_path, html_path)
+
         except Exception as e:
-            logging.error(f"Error processing file {path.name}: {e}")
+            logging.error(f"❌ Error processing {path.name}: {e}")
 
 
 def main():
-    WATCH_FOLDER.mkdir(exist_ok=True)
-    DEST_FOLDER.mkdir(exist_ok=True)
+    for folder in [WATCH_FOLDER, DEST_FOLDER, HTML_FOLDER]:
+        folder.mkdir(parents=True, exist_ok=True)
 
-    logging.info(f"Watching folder: {WATCH_FOLDER}")
+    logging.info(f"👀 Watching folder: {WATCH_FOLDER}")
 
     event_handler = MarkdownHandler()
     observer = Observer()
@@ -110,7 +129,7 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-        logging.info("Stopped watching.")
+        logging.info("👋 Stopped watching.")
     observer.join()
 
 
