@@ -6,8 +6,8 @@ from langgraph.graph import StateGraph, END
 
 from .utils.views import print_agent_output
 from .utils.llms import call_model
-from extensions.memory.draft import DraftState
-from extensions.agents import ResearchAgent, ReviewerAgent, ReviserAgent
+from custom_agents.memory.draft import DraftState
+from custom_agents.agents import ResearchAgent, ReviewerAgent, ReviserAgent
 
 
 class EditorAgent:

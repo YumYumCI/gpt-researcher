@@ -6,7 +6,7 @@ import json
 import logging
 from typing import Optional, Dict, Any
 from langgraph.graph import StateGraph, END
-from extensions.memory.research import ResearchState
+from custom_agents.memory.research import ResearchState
 from .utils.views import print_agent_output
 from .utils.utils import sanitize_filename
 
@@ -42,7 +42,7 @@ class ChiefEditorAgent:
         query = self.task.get("query") or "no_query"
         query_snippet = query[:40] if isinstance(query, str) else "no_query"
 
-        output_dir = os.path.join("extensions", "outputs", sanitize_filename(
+        output_dir = os.path.join("custom_agents", "reports", sanitize_filename(
             f"run_{self.task_id}_{query_snippet}"
         ))
 

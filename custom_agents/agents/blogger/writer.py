@@ -1,7 +1,7 @@
 from datetime import datetime
 import json as json
-from extensions.agents.utils.views import print_agent_output
-from extensions.agents.utils.llms import call_model
+from custom_agents.agents.utils.views import print_agent_output
+from custom_agents.agents.utils.llms import call_model
 
 sample_json = """
 {

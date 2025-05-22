@@ -1,12 +1,12 @@
 import os
 import logging
-from extensions.agents.utils.file_formats import (
+from custom_agents.agents.utils.file_formats import (
     write_md_to_pdf,
     write_md_to_word,
     write_text_to_md,
     write_to_json
 )
-from extensions.agents.utils.views import print_agent_output
+from custom_agents.agents.utils.views import print_agent_output
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

@@ -1,6 +1,6 @@
 def build_agents(task, websocket=None, stream_output=None, tone=None, headers=None):
     task_team = task.get("team", "default")
-    output_dir = task.get("output_dir", "./extensions/outputs")
+    output_dir = task.get("output_dir", "./custom_agents/reports")
 
     if task_team == "blogger":
         from agents.blogger import EditorAgent, WriterAgent, PublisherAgent

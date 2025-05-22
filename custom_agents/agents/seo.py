@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from gpt_researcher.agent import BaseAgent
-from extensions.prompts.custom_prompt_family import CustomPromptFamily
+from custom_agents.prompts.custom_prompt_family import CustomPromptFamily
 from ..utils.views import print_agent_output
 from ..utils.llms import call_model
 

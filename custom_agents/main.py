@@ -8,8 +8,8 @@ import logging
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
-from extensions.team_builder import build_agents
-from extensions.agents.orchestrator import ChiefEditorAgent
+from custom_agents.team_builder import build_agents
+from custom_agents.agents.orchestrator import ChiefEditorAgent
 
 logging.basicConfig(level=logging.INFO)
 load_dotenv()
