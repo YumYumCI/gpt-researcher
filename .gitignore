@@ -3,7 +3,7 @@
 .venv
 .envrc
 .webui_secret_key
-
+task.json
 #Ignore Virtual Env
 env/
 venv/

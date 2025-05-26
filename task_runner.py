@@ -7,6 +7,8 @@ import traceback
 import time
 import socket
 
+###  python task_runner.py --config custom_agents/config.json --task custom_agents/task.json
+
 from colorama import Fore, Style, init
 init(autoreset=True)
 
@@ -39,6 +41,7 @@ def run_task(config, defaults, task_updates, task_file, task_index, total_tasks)
     # if missing_keys:
     #     print(Fore.YELLOW + f"✗ Skipping task {task_index}: Missing keys: {missing_keys}")
     #     return
+
 
     # Write the task config
     with open(task_file, 'w') as f:

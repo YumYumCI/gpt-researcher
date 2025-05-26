@@ -4,3 +4,4 @@ markdown-to-json
 selenium
 watchdog
 langgraph-cli
+python-frontmatter

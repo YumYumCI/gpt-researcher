@@ -85,7 +85,7 @@ class EditorAgent:
         return [
             {
                 "role": "system",
-                "content": "You are a research editor. Your goal is to oversee the research project "
+                "content": "You are a editor. Your goal is to oversee the project "
                            "from inception to completion. Your main task is to plan the article section "
                            "layout based on an initial research summary.\n ",
             },
@@ -107,10 +107,10 @@ class EditorAgent:
         )
 
         return f"""Today's date is {today}
-                   Research summary report: '{initial_research}'
+                   summary report: '{initial_research}'
                    {feedback_instruction}
-                   \nYour task is to generate an outline of sections headers for the research project
-                   based on the research summary report above.
+                   \nYour task is to generate an outline of sections headers for the project
+                   based on the summary report above.
                    You must generate a maximum of {max_sections} section headers.
                    You must focus ONLY on related research topics for subheaders and do NOT include introduction, conclusion and references.
                    You must return nothing but a JSON with the fields 'title' (str) and 
