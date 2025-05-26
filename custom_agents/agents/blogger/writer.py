@@ -7,10 +7,9 @@ sample_json = """
 {
   "title": "A catchy, SEO-friendly title for the blog post",
   "author": "Name of the researcher or author (optional)",
+  "description": "A brief description of the blog post that summarizes its main points.",
   "date": "YYYY-MM-DD",
   "tags": ["tag1", "tag2", "tag3"],
-
-  "table_of_contents": "A table of contents in markdown syntax (using '-') that reflects the main blog sections and nested subsections, if any.",
 
   "introduction": "A compelling, markdown-formatted introduction that hooks the reader, clearly explains the purpose of the blog, and includes relevant hyperlink references to sources.",
 
@@ -48,8 +47,8 @@ class WriterAgent:
     def get_headers(self, research_state: dict):
         return {
             "title": research_state.get("title"),
-            "author": research_state.get("author", "Unknown Author"),
-            "date": "Date",
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "description": research_state.get("description"),
             "tags": research_state.get("tags", [])
         }
 
@@ -80,7 +79,7 @@ Research data:
 {json.dumps(data, indent=2)}
 
 Your task:
-Write a detailed, markdown-formatted blog article that includes a title, author, date, tags, introduction, 
+Write a detailed, markdown-formatted blog article that includes a title, author, date, tags, introduction, description, 
 detailed main content sections with subsections, a conclusion, and a list of sources in APA style.
 
 Each section should be engaging and informative, including markdown hyperlinks where appropriate.
