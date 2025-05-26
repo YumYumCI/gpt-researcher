@@ -2,6 +2,10 @@
   "defaults": {
     "query": "Is AI in a hype cycle?",
     "team": "blogger",
+    "author": "name",
+    "bio": "bio",
+    "avatar": "🧊",
+    "report_type":"deep",
     "max_sections": 4,
     "publish_formats": {
       "markdown": true,
