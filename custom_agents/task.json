@@ -1,6 +1,10 @@
 {
-  "query": "Provide a concise yet informative report of amazon refunds, including its origin or background significance or impact, and any notable facts or controversies associated with it. Make it accessible to a, general audience and include relevant context where helpful",
+  "query": "tell me what you can about Jack Black.",
   "team": "blogger",
+  "author": "name",
+  "bio": "bio",
+  "avatar": "\ud83e\uddca",
+  "report_type": "deep",
   "max_sections": 4,
   "publish_formats": {
     "markdown": true,
@@ -12,11 +16,7 @@
   "follow_guidelines": false,
   "model": "gpt-4o",
   "guidelines": [
-    "Use clear headings and subheadings",
-    "Keep paragraphs short (2 to 4 sentences max)",
-    "Use bullet points, numbered lists, and bolding for key takeaways",
-    "The report MUST be written in APA format",
-    "Maintain consistency in tone throughout"
+    "Craft compelling, SEO-friendly, and engaging titles and section headings"
   ],
   "verbose": false
 }
