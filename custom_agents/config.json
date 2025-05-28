@@ -1,11 +1,11 @@
 {
   "defaults": {
-    "query": "Is AI in a hype cycle?",
+    "query": "",
     "team": "blogger",
     "author": "name",
     "bio": "bio",
     "avatar": "🧊",
-    "report_type":"deep",
+    "report_type": "deep",
     "max_sections": 4,
     "publish_formats": {
       "markdown": true,
@@ -23,7 +23,7 @@
   },
   "updates_queue": [
     {
-      "query": "tell me what you can about Jack Black."
+      "query": "tell me what you can about jason collins."
     }
   ]
 }

@@ -1,6 +1,6 @@
 from .utils.views import print_agent_output
 from .utils.llms import call_model
-import json
+import json5 as json
 
 sample_revision_notes = """
 {
@@ -34,16 +34,28 @@ class ReviserAgent:
             },
             {
                 "role": "user",
-                "content": f"""Draft:\n{draft_report}" + "Reviewer's notes:\n{review}\n\n
-You have been tasked by your reviewer with revising the following draft, which was written by a non-expert.
+                "content": f"""
+                **Task:** Revise the following draft based on the reviewer’s feedback.  
+                
+                
+                You have been tasked by your reviewer with revising the following draft, which was written by a non-expert.
 If you decide to follow the reviewer's notes, please write a new draft and make sure to address all of the points they raised.
 Please keep all other aspects of the draft the same.
-You MUST return nothing but a JSON in the following format:
-{sample_revision_notes}
-""",
+
+                **Rules:**  
+                1. **Address All Feedback** – Ensure every reviewer note is resolved.  
+                2. **Preserve Intent** – Keep the core message and structure intact unless changes are requested.  
+                3. **Improve Clarity & Flow** – Smooth out awkward phrasing or gaps in logic.  
+                
+                **Input:**  
+                - Draft: {draft_report}  
+                - Reviewer’s Notes: {review}  
+                
+                You MUST return nothing but a JSON in the following format: {sample_revision_notes}
+                """,
             },
         ]
-
+#Draft:\n{draft_report}" + "Reviewer's notes:\n{review}\n\n
         response = await call_model(
             prompt,
             model=task.get("model"),

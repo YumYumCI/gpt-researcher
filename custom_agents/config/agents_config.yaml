@@ -1,0 +1,11 @@
+# agents_config.yaml
+research:
+  class: custom_agents.agents.ResearchAgent
+  params:
+    websocket: null
+    stream_output: null
+
+editor:
+  class: custom_agents.agents.EditorAgent
+  params:
+    tone: professional

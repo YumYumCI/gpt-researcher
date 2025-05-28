@@ -5,3 +5,5 @@ selenium
 watchdog
 langgraph-cli
 python-frontmatter
+jsonschema
+pydash

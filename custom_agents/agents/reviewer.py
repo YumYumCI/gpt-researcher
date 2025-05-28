@@ -22,20 +22,41 @@ class ReviewerAgent:
         guidelines = "- ".join(guideline for guideline in task.get("guidelines"))
         revision_notes = draft_state.get("revision_notes")
 
-        revise_prompt = f"""The reviser has already revised the draft based on your previous review notes with the following feedback:
-{revision_notes}\n
-Please provide additional feedback ONLY if critical since the reviser has already made changes based on your previous feedback.
-If you think the article is sufficient or that non critical revisions are required, please aim to return None.
-"""
-
-        review_prompt = f"""You have been tasked with reviewing the draft which was written by a non-expert based on specific guidelines.
+        revise_prompt = f"""
+        The reviser has already revised the draft based on your previous feedback: {revision_notes}\n
+        
+        **Provide additional feedback ONLY if:**  
+        - Critical issues remain (e.g., factual errors, tone mismatch).  
+        - The revisions failed to address your original notes. 
+        
+        If the article is now sufficient or only minor tweaks are needed, return `None`.
+        
+        You have been tasked with reviewing the draft which was written by a non-expert based on specific guidelines.
 Please accept the draft if it is good enough to publish, or send it for revision, along with your notes to guide the revision.
 If not all of the guideline criteria are met, you should send appropriate revision notes.
 If the draft meets all the guidelines, please return None.
-{revise_prompt if revision_notes else ""}
+        """
 
-Guidelines: {guidelines}\nDraft: {draft_state.get("draft")}\n
-"""
+        review_prompt = f"""
+        You are an article reviewer. Your task is to evaluate a draft based on the following criteria:  
+        
+        **Key Evaluation Factors:**  
+        1. **Clarity & Structure** – Is the article logically organized with smooth transitions?  
+        2. **Audience Fit** – Does the tone (casual, professional, technical) match the target readers?  
+        3. **Engagement** – Does it hold interest with storytelling, examples, or persuasive techniques?  
+        4. **Accuracy** – Are claims supported by evidence (if research-based)?  
+        5. **Guideline Adherence** – Does it follow the specified format (blog, news, tutorial, etc.)?  
+
+        **Decision Rules:**  
+        - ✅ **Accept** if the draft meets all criteria (return `None`).  
+        - 🔄 **Revise** if improvements are needed (provide clear, actionable notes).  
+
+        **Input:** Article draft, target audience, and guidelines.  
+        **Output:** Revision notes (if needed) or `None`.  
+        {revise_prompt if revision_notes else ""}
+
+        Guidelines: {guidelines}\nDraft: {draft_state.get("draft")}\n
+        """
         prompt = [
             {"role": "system", "content": TEMPLATE},
             {"role": "user", "content": review_prompt},

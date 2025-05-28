@@ -1,5 +1,12 @@
-from typing import TypedDict, List, Annotated, Optional
-import operator
+from typing import TypedDict, List, Dict, Optional, Any
+from datetime import datetime
+
+
+class Introduction(TypedDict):
+    hook: str
+    context: str
+    thesis: str
+
 
 class Subsection(TypedDict):
     subheading: str
@@ -12,19 +19,60 @@ class MainContentSection(TypedDict):
     subsections: List[Subsection]
 
 
-class ResearchState(TypedDict):
-    task: dict
-    initial_research: str
-    sections: List[str]
-    research_data: List[dict]
-    human_feedback: str
-    # Report layout
+class Conclusion(TypedDict):
+    summary: str
+    call_to_action: str
+
+
+class Source(TypedDict):
+    citation: str
+    url: Optional[str]
+
+
+class AdditionalResource(TypedDict):
     title: str
-    headers: dict
+    url: str
+
+
+class References(TypedDict):
+    sources: List[Source]
+    additional_resources: List[AdditionalResource]
+
+
+class Metadata(TypedDict):
+    title: str
+    author: Optional[str]
+    description: Optional[str]
     date: str
-    table_of_contents: str
-    introduction: str
+    tags: List[str]
+    word_count: Optional[str]
+    draft: Optional[bool]
+
+
+class Content(TypedDict):
+    introduction: Introduction
     main_content: List[MainContentSection]
-    conclusion: str
-    sources: List[str]
-    report: str
+    conclusion: Conclusion
+
+
+class ResearchState(TypedDict):
+    # Required core components
+    metadata: Metadata
+    content: Content
+    references: References
+
+    # Task parameters
+    task: Dict[str, Any]
+
+    # Research components
+    initial_research: Optional[str]
+    research_data: Optional[List[Dict]]
+    human_feedback: Optional[str]
+
+    # Intermediate components
+    table_of_contents: Optional[str]
+    report: Optional[str]
+
+    review: Optional[Dict]  # Added for review feedback
+    revision_notes: Optional[str]  # Added for revision tracking
+    human_feedback: Optional[str]  # For human-in-the-loop
